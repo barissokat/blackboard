@@ -14,14 +14,25 @@ class ProjectsTest extends TestCase
     /**
      * @return void
      */
+    public function testOnlyAuthenticatedUsersCanCreateProject()
+    {
+        $this->storeProject()->assertRedirect('login');
+    }
+
+    /**
+     * @return void
+     */
     public function testAUserCanCreateAProject()
     {
+        $this->signIn();
+
         $attributes = [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
         ];
 
-        $this->storeProject($attributes)->assertRedirect('/projects');
+        $this->storeProject($attributes)
+            ->assertRedirect('/projects');
 
         $this->assertDatabaseHas('projects', $attributes);
 
@@ -34,6 +45,8 @@ class ProjectsTest extends TestCase
      */
     public function testAUserCanViewAProject()
     {
+        $this->signIn();
+
         $project = factory(Project::class)->create();
 
         $this->get($project->path())
@@ -46,6 +59,8 @@ class ProjectsTest extends TestCase
      */
     public function testAProjectRequiresATitle()
     {
+        $this->signIn();
+
         $this->storeProject(['title' => null])
             ->assertSessionHasErrors('title');
     }
@@ -55,6 +70,8 @@ class ProjectsTest extends TestCase
      */
     public function testAProjectRequiresADescription()
     {
+        $this->signIn();
+
         $this->storeProject(['description' => null])
             ->assertSessionHasErrors('description');
     }
@@ -63,9 +80,9 @@ class ProjectsTest extends TestCase
      *
      * @return mixed
      */
-    public function storeProject($overrides = [])
+    public function storeProject($attributes = [])
     {
-        $project = factory(Project::class)->make($overrides);
+        $project = factory(Project::class)->make($attributes);
 
         return $this->post(route('projects.store'), $project->toArray());
     }

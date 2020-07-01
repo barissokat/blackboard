@@ -14,6 +14,16 @@ class Project extends Model
     protected $guarded = [];
 
     /**
+     * A project has an owner.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
      * Get a string path for the project.
      *
      * @return string
