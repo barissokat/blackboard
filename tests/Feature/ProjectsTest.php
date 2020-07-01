@@ -32,6 +32,18 @@ class ProjectsTest extends TestCase
     /**
      * @return void
      */
+    public function testAUserCanViewAProject()
+    {
+        $project = factory(Project::class)->create();
+
+        $this->get($project->path())
+            ->assertSee($project->title)
+            ->assertSee($project->description);
+    }
+
+    /**
+     * @return void
+     */
     public function testAProjectRequiresATitle()
     {
         $this->storeProject(['title' => null])
@@ -49,7 +61,7 @@ class ProjectsTest extends TestCase
 
     /**
      *
-     * @return void
+     * @return mixed
      */
     public function storeProject($overrides = [])
     {

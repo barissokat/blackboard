@@ -84,15 +84,11 @@
 
         <div class="content">
             <div class="title m-b-md">
-                Projects
+                {{ $project->title }}
             </div>
 
             <div class="links">
-                @forelse ($projects as $project)
-                <a href="{{ $project->path() }}">{{ $project->title }}</a>
-                @empty
-                There are no projects at this time.
-                @endforelse
+                {{ $project->description }}
             </div>
         </div>
     </div>

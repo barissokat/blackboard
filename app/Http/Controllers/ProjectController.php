@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $projects = Project::all();
@@ -14,6 +19,11 @@ class ProjectController extends Controller
         return view('projects.index', compact('projects'));
     }
 
+    /**
+     * Store a new project.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         // validate
@@ -27,5 +37,16 @@ class ProjectController extends Controller
 
         // redirect
         return redirect('/projects');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Project $project)
+    {
+        return view('projects.show', compact('project'));
     }
 }
