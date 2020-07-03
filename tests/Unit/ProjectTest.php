@@ -31,7 +31,7 @@ class ProjectTest extends TestCase
     /**
      * @return void
      */
-    public function testAProjectHasAnOwner()
+    public function testAProjectBelongsToAnOwner()
     {
         $this->assertInstanceOf(User::class, $this->project->owner);
     }

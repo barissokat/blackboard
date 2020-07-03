@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class ProjectsTest extends TestCase
@@ -14,9 +15,29 @@ class ProjectsTest extends TestCase
     /**
      * @return void
      */
-    public function testOnlyAuthenticatedUsersCanCreateProject()
+    public function testGuestsCannotCreateProject()
     {
         $this->storeProject()->assertRedirect('login');
+    }
+
+    /**
+     * @return void
+     */
+    public function testGuestsCannotViewProjects()
+    {
+
+        $this->get(route('projects.index'))->assertRedirect('login');
+    }
+
+    /**
+     * @return void
+     */
+    public function testGuestsCannotViewASingleProject()
+    {
+        $project = factory(Project::class)->create();
+
+        $this->get($project->path())
+            ->assertRedirect('login');
     }
 
     /**
@@ -43,15 +64,28 @@ class ProjectsTest extends TestCase
     /**
      * @return void
      */
-    public function testAUserCanViewAProject()
+    public function testAUserCanViewTheirProject()
+    {
+        $this->signIn();
+
+        $project = factory(Project::class)->create(['user_id' => auth()->id()]);
+
+        $this->get($project->path())
+            ->assertSee($project->title)
+            ->assertSee($project->description);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAnAuthenticatedUserCannotViewTheProjectsOfOthers()
     {
         $this->signIn();
 
         $project = factory(Project::class)->create();
 
         $this->get($project->path())
-            ->assertSee($project->title)
-            ->assertSee($project->description);
+            ->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
     /**
