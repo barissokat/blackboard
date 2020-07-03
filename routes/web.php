@@ -19,8 +19,9 @@ Route::get('/', function () {
 });
 
 Route::get('projects', ['as' => 'projects.index', 'uses' => 'ProjectController@index']);
-Route::get('projects/{project}', ['as' => 'projects.show', 'uses' => 'ProjectController@show']);
+Route::get('projects/create', ['as' => 'projects.create', 'uses' => 'ProjectController@create']);
 Route::post('projects', ['as' => 'projects.store', 'uses' => 'ProjectController@store']);
+Route::get('projects/{project}', ['as' => 'projects.show', 'uses' => 'ProjectController@show']);
 
 Auth::routes();
 
