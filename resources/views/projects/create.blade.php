@@ -33,6 +33,7 @@
                             @enderror
                         </div>
                         <button type="submit" class="btn btn-primary">Add</button>
+                        <a href="{{ route('projects.index') }}" class="btn btn-secondary">Cancel</a>
                     </form>
                 </div>
             </div>
