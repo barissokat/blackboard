@@ -25,7 +25,11 @@ module.exports = {
                 },
                 white: {
                     default: '#fff',
-                }
+                },
+                blue: {
+                    default: '#47cdff',
+                    light: '#8ae2fe',
+                },
             },
             spacing: {
                 '96': '24rem',

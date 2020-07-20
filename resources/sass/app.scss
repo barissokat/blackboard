@@ -2,4 +2,9 @@
 
 @tailwind components;
 
+.card {
+    @apply bg-white p-5 rounded-lg;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.08);
+}
+
 @tailwind utilities;
