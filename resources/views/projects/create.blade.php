@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<form action="{{ route('projects.store')}}" method="post" class="needs-validation" novalidate>
+<form action="{{ route('projects.store')}}" method="post">
     @csrf
     <h1 class="heading is-1">Create a Project</h1>
 
@@ -23,7 +23,8 @@
 
     <div class="field">
         <div class="control">
-            <button type="submit" class="button is-link">Create Project</button>
+            <button type="submit" class="button is-link mr-2">Create Project</button>
+
             <a href="/projects">Cancel</a>
         </div>
     </div>

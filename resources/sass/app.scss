@@ -2,9 +2,12 @@
 
 @tailwind components;
 
+.button {
+    @apply bg-red text-white no-underline rounded-lg text-sm py-2 px-5 shadow-red;
+}
+
 .card {
-    @apply bg-white p-5 rounded-lg;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.08);
+    @apply bg-white p-5 rounded-lg shadow;
 }
 
 @tailwind utilities;

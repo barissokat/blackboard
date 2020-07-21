@@ -26,15 +26,20 @@ module.exports = {
                 white: {
                     default: '#fff',
                 },
-                blue: {
-                    default: '#47cdff',
-                    light: '#8ae2fe',
+                red: {
+                    default: '#d00000',
+                    light: '#dc2f02',
                 },
+
             },
             spacing: {
                 '96': '24rem',
                 '128': '32rem',
-            }
+            },
+            boxShadow: {
+                default: '0 0 5px 0 rgba(0, 0, 0, 0.08)',
+                red: '0 2px 7px 0 #d00000',
+            },
         }
     },
     variants: {},

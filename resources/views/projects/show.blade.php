@@ -6,9 +6,10 @@
         <p class="text-grey text-sm font-normal">
             <a href="/projects" class="text-grey text-sm font-normal no-underline hover:underline">My Projects</a> /
             {{ $project->title }}
+            <a href="/projects/create" class="button ml-2">Add Task</a>
         </p>
 
-        <a href="/projects/create" class="button">New Project</a>
+        <a href="/projects/create" class="button">Invite to Project</a>
     </div>
 </header>
 
@@ -34,7 +35,7 @@
         </div>
 
         <div class="lg:w-1/4 px-3 lg:py-8">
-            @include ('projects.card')
+            @include ('projects._card')
         </div>
     </div>
 </main>
