@@ -23,6 +23,8 @@ Route::get('projects/create', ['as' => 'projects.create', 'uses' => 'ProjectCont
 Route::post('projects', ['as' => 'projects.store', 'uses' => 'ProjectController@store']);
 Route::get('projects/{project}', ['as' => 'projects.show', 'uses' => 'ProjectController@show']);
 
+Route::post('projects/{project}/tasks', ['as' => 'project.tasks.store', 'uses' => 'ProjectTaskController@store']);
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

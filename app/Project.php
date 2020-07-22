@@ -24,6 +24,21 @@ class Project extends Model
     }
 
     /**
+     * A project has a task.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function addTask($body)
+    {
+        return $this->tasks()->create(compact('body'));
+    }
+
+    /**
      * Get a string path for the project.
      *
      * @return string
