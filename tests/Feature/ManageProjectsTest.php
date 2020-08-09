@@ -12,44 +12,28 @@ class ManageProjectsTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
-    /**
-     * @return void
-     */
-    public function testAUserCanViewTheirProject()
+    public function testGuestCannotManageProjects()
     {
-        $this->signIn();
-
-        $project = factory(Project::class)->create(['user_id' => auth()->id()]);
-
-        $this->get($project->path())
-            ->assertSee($project->title)
-            ->assertSee($project->description);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGuestsCannotViewProjects()
-    {
-        $this->get(route('projects.index'))->assertRedirect('login');
-    }
-
-    /**
-     * @return void
-     */
-    public function testAnAuthenticatedUserCannotViewTheProjectsOfOthers()
-    {
-        $this->signIn();
-
         $project = factory(Project::class)->create();
 
-        $this->get($project->path())
-            ->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->get('projects')->assertRedirect('login');
+        $this->get('projects/create')->assertRedirect('login');
+        $this->post('projects', $project->toArray())->assertRedirect('login');
+        $this->get($project->path())->assertRedirect('login');
     }
 
-    /**
-     * @return void
-     */
+    public function testGuestsCannotCreateProject()
+    {
+        $this->storeProject()
+            ->assertRedirect('login');
+    }
+
+    public function testGuestsCannotViewProjects()
+    {
+        $this->get(route('projects.index'))
+            ->assertRedirect('login');
+    }
+
     public function testGuestsCannotViewASingleProject()
     {
         $project = factory(Project::class)->create();
@@ -58,9 +42,6 @@ class ManageProjectsTest extends TestCase
             ->assertRedirect('login');
     }
 
-    /**
-     * @return void
-     */
     public function testAUserCanCreateAProject()
     {
         $this->signIn();
@@ -81,17 +62,28 @@ class ManageProjectsTest extends TestCase
             ->assertSee($attributes['title']);
     }
 
-    /**
-     * @return void
-     */
-    public function testGuestsCannotCreateProject()
+    public function testAUserCanViewTheirProject()
     {
-        $this->storeProject()->assertRedirect('login');
+        $this->signIn();
+
+        $project = factory(Project::class)->create(['user_id' => auth()->id()]);
+
+        $this->get($project->path())
+            ->assertSee($project->title)
+            ->assertSee($project->description);
     }
 
-    /**
-     * @return void
-     */
+
+    public function testAnAuthenticatedUserCannotViewTheProjectsOfOthers()
+    {
+        $this->signIn();
+
+        $project = factory(Project::class)->create();
+
+        $this->get($project->path())
+            ->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+
     public function testAProjectRequiresATitle()
     {
         $this->signIn();
@@ -100,9 +92,6 @@ class ManageProjectsTest extends TestCase
             ->assertSessionHasErrors('title');
     }
 
-    /**
-     * @return void
-     */
     public function testAProjectRequiresADescription()
     {
         $this->signIn();
@@ -111,14 +100,10 @@ class ManageProjectsTest extends TestCase
             ->assertSessionHasErrors('description');
     }
 
-    /**
-     *
-     * @return mixed
-     */
     public function storeProject($attributes = [])
     {
-        $project = factory(Project::class)->make($attributes);
+        $project = factory(Project::class)->raw($attributes);
 
-        return $this->post(route('projects.store'), $project->toArray());
+        return $this->post(route('projects.store'), $project);
     }
 }

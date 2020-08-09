@@ -20,26 +20,17 @@ class ProjectTest extends TestCase
         $this->project = factory(Project::class)->create();
     }
 
-    /**
-     * @return void
-     */
-    public function testAProjectHasAPath()
+    public function testAProjectHasPath()
     {
         $this->assertEquals('/projects/' . $this->project->id, $this->project->path());
     }
 
-    /**
-     * @return void
-     */
     public function testAProjectBelongsToAnOwner()
     {
         $this->assertInstanceOf(User::class, $this->project->owner);
     }
 
-    /**
-     * @return void
-     */
-    public function testCanAddATask()
+    public function testAProjectCanAddATask()
     {
         $project = factory(Project::class)->create();
 
