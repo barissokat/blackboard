@@ -6,15 +6,25 @@ use App\Project;
 use App\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class ProjectTasksTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @return void
-     */
+    public function testOnlyTheOwnerOfAProjectMayAddTasks()
+    {
+        $this->signIn();
+
+        $project = factory('App\Project')->create();
+
+        $this->post($project->path() . '/tasks', ['body' => 'Test task'])
+            ->assertStatus(Response::HTTP_FORBIDDEN);
+
+        $this->assertDatabaseMissing('tasks', ['body' => 'Test task']);
+    }
+
     public function testAProjectCanHaveTasks()
     {
         $this->signIn();
@@ -29,9 +39,6 @@ class ProjectTasksTest extends TestCase
             ->assertSee('Test task');
     }
 
-    /**
-     * @return void
-     */
     public function testATaskRequiresABody()
     {
         $this->signIn();
