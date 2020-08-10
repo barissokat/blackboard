@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Project;
 use App\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
@@ -82,6 +81,15 @@ class ProjectTasksTest extends TestCase
         $this->patch($task->path(), $attributes);
 
         $this->assertDatabaseHas('tasks', $attributes);
+    }
+
+    public function testATaskUpdateAlsoUpdatesItsProjectTimestamp()
+    {
+        $project = factory(Project::class)->create(['updated_at' => now()->subDays(30)]);
+
+        $task = $project->addTask('Test task');
+
+        $this->assertEquals($project->fresh()->updated_at, $task->updated_at);
     }
 
     public function testATaskRequiresABody()
