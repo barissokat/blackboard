@@ -13,16 +13,41 @@ class ProjectTasksTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function testGuestsCannotAddTasksToProjects()
+    {
+        $project = factory(Project::class)->create();
+
+        $this->post($project->path() . '/tasks')->assertRedirect('login');
+    }
+
     public function testOnlyTheOwnerOfAProjectMayAddTasks()
     {
         $this->signIn();
 
         $project = factory('App\Project')->create();
 
-        $this->post($project->path() . '/tasks', ['body' => 'Test task'])
+        $attributes = ['body' => 'Test task'];
+
+        $this->post($project->path() . '/tasks', $attributes)
             ->assertStatus(Response::HTTP_FORBIDDEN);
 
-        $this->assertDatabaseMissing('tasks', ['body' => 'Test task']);
+        $this->assertDatabaseMissing('tasks', $attributes);
+    }
+
+    public function testOnlyAOwnerOfAProjectMayUpdateATask()
+    {
+        $this->signIn();
+
+        $project = factory(Project::class)->create();
+
+        $task = $project->addTask('Task');
+
+        $attributes = ['body' => 'changed'];
+
+        $this->patch($task->path(), $attributes)
+            ->assertStatus(Response::HTTP_FORBIDDEN);
+
+        $this->assertDatabaseMissing('tasks', $attributes);
     }
 
     public function testAProjectCanHaveTasks()
@@ -37,6 +62,26 @@ class ProjectTasksTest extends TestCase
 
         $this->get($project->path())
             ->assertSee('Test task');
+    }
+
+    public function testATaskCanBeUpdated()
+    {
+        $this->signIn();
+
+        $project = auth()->user()->projects()->create(
+            factory(Project::class)->raw()
+        );
+
+        $task = $project->addTask('Test task');
+
+        $attributes = [
+            'body' => 'changed',
+            'completed' => true,
+        ];
+
+        $this->patch($task->path(), $attributes);
+
+        $this->assertDatabaseHas('tasks', $attributes);
     }
 
     public function testATaskRequiresABody()

@@ -20,7 +20,7 @@ class ProjectTest extends TestCase
         $this->project = factory(Project::class)->create();
     }
 
-    public function testAProjectHasPath()
+    public function testAProjectHasAPath()
     {
         $this->assertEquals('/projects/' . $this->project->id, $this->project->path());
     }

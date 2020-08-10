@@ -46,15 +46,15 @@ class ManageProjectsTest extends TestCase
     {
         $this->signIn();
 
-        $this->get(route('projects.create'))->assertStatus(Response::HTTP_OK);
+        $this->get(route('projects.create'))->assertOk();
 
         $attributes = [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
         ];
 
-        $this->storeProject($attributes)
-            ->assertRedirect(route('projects.index'));
+        $response = $this->post('projects', $attributes)
+            ->assertRedirect(Project::where($attributes)->first()->path());
 
         $this->assertDatabaseHas('projects', $attributes);
 
@@ -70,9 +70,8 @@ class ManageProjectsTest extends TestCase
 
         $this->get($project->path())
             ->assertSee($project->title)
-            ->assertSee($project->description);
+            ->assertSee(\Illuminate\Support\Str::limit($project->description, 100));
     }
-
 
     public function testAnAuthenticatedUserCannotViewTheProjectsOfOthers()
     {

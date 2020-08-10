@@ -23,7 +23,8 @@ Route::get('projects/create', ['as' => 'projects.create', 'uses' => 'ProjectCont
 Route::post('projects', ['as' => 'projects.store', 'uses' => 'ProjectController@store']);
 Route::get('projects/{project}', ['as' => 'projects.show', 'uses' => 'ProjectController@show']);
 
-Route::post('projects/{project}/tasks', ['as' => 'project.tasks.store', 'uses' => 'ProjectTaskController@store']);
+Route::post('projects/{project}/tasks', ['as' => 'tasks.store', 'uses' => 'ProjectTaskController@store']);
+Route::patch('projects/{project}/tasks/{task}', ['as' => 'tasks.update', 'uses' => 'ProjectTaskController@update']);
 
 Auth::routes();
 
