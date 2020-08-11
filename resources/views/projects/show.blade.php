@@ -6,7 +6,7 @@
         <p class="text-grey text-sm font-normal">
             <a href="/projects" class="text-grey text-sm font-normal no-underline hover:underline">My Projects</a> /
             {{ $project->title }}
-            <a href="/projects/create" class="button ml-2">Add Task</a>
+            <a href="{{ $project->path() . '/edit' }}" class="button ml-2">Edit Project</a>
         </p>
 
         <a href="/projects/create" class="button">Invite to Project</a>
