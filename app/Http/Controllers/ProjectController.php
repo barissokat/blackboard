@@ -50,6 +50,7 @@ class ProjectController extends Controller
         $attributes = request()->validate([
             'title' => 'required',
             'description' => 'required',
+            'notes' => 'min:3',
         ]);
 
         // persist
@@ -62,13 +63,30 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Project  $project
-     * \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param \App\Project $project
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Project $project)
     {
-        abort_if(auth()->user()->isNot($project->owner), 403);
+        $this->authorize('update', $project);
 
         return view('projects.show', compact('project'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Project $project
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function update(Request $request, Project $project)
+    {
+        $this->authorize('update', $project);
+
+        $project->update(request(['notes']));
+
+        return redirect($project->path());
     }
 }

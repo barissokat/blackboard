@@ -23,12 +23,11 @@ class ProjectTaskController extends Controller
      *
      * @param Project $project
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(Project $project)
     {
-        if (auth()->user()->isNot($project->owner)) {
-            abort(403);
-        }
+        $this->authorize('update', $project);
 
         request()->validate(['body' => 'required']);
 
@@ -44,12 +43,11 @@ class ProjectTaskController extends Controller
      * @param \App\Task $task
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Project $project, Task $task, Request $request)
     {
-        if (auth()->user()->isNot($project->owner)) {
-            abort(403);
-        }
+        $this->authorize('update', $task->project);
 
         request()->validate(['body' => 'required']);
 

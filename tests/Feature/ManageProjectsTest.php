@@ -44,22 +44,46 @@ class ManageProjectsTest extends TestCase
 
     public function testAUserCanCreateAProject()
     {
+        $this->withoutExceptionHandling();
+
         $this->signIn();
 
         $this->get(route('projects.create'))->assertOk();
 
         $attributes = [
-            'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph,
+            'title' => $this->faker->word,
+            'description' => $this->faker->sentence,
+            'notes' => $this->faker->sentence,
         ];
 
-        $response = $this->post('projects', $attributes)
-            ->assertRedirect(Project::where($attributes)->first()->path());
+        $response = $this->post('projects', $attributes);
+
+        $project = Project::where($attributes)->first();
+
+        $response->assertRedirect($project->path());
 
         $this->assertDatabaseHas('projects', $attributes);
 
-        $this->get(route('projects.index'))
-            ->assertSee($attributes['title']);
+        $this->get($project->path())
+            ->assertSee($attributes['title'])
+            ->assertSee($attributes['description'])
+            ->assertSee($attributes['notes']);
+    }
+
+    public function testAUserCanUpdateAProject()
+    {
+        $this->signIn();
+
+        $project = factory(Project::class)->create(['user_id' => auth()->id()]);
+
+        $attributes = [
+            'notes' => 'Changed',
+        ];
+
+        $this->patch($project->path(), $attributes)
+            ->assertRedirect($project->path());
+
+        $this->assertDatabaseHas('projects', $attributes);
     }
 
     public function testAUserCanViewTheirProject()
@@ -80,6 +104,16 @@ class ManageProjectsTest extends TestCase
         $project = factory(Project::class)->create();
 
         $this->get($project->path())
+            ->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    public function testAnAuthenticatedUserCannotUpdateProjectsOfOthers()
+    {
+        $this->signIn();
+
+        $project = factory(Project::class)->create();
+
+        $this->patch($project->path(), [])
             ->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
