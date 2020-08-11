@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Project;
+use Facades\Tests\Setup\ProjectFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,9 +17,10 @@ class ManageProjectsTest extends TestCase
     {
         $project = factory(Project::class)->create();
 
-        $this->get('projects')->assertRedirect('login');
-        $this->get('projects/create')->assertRedirect('login');
-        $this->post('projects', $project->toArray())->assertRedirect('login');
+        $this->get(route('projects.index'))->assertRedirect('login');
+        $this->get(route('projects.create'))->assertRedirect('login');
+        $this->get($project->path() . '/edit')->assertRedirect('login');
+        $this->post(route('projects.store'), $project->toArray())->assertRedirect('login');
         $this->get($project->path())->assertRedirect('login');
     }
 
@@ -45,7 +47,6 @@ class ManageProjectsTest extends TestCase
     public function testAUserCanCreateAProject()
     {
         $this->withoutExceptionHandling();
-
         $this->signIn();
 
         $this->get(route('projects.create'))->assertOk();
@@ -56,13 +57,11 @@ class ManageProjectsTest extends TestCase
             'notes' => $this->faker->sentence,
         ];
 
-        $response = $this->post('projects', $attributes);
+        $response = $this->post(route('projects.store'), $attributes);
 
         $project = Project::where($attributes)->first();
 
         $response->assertRedirect($project->path());
-
-        $this->assertDatabaseHas('projects', $attributes);
 
         $this->get($project->path())
             ->assertSee($attributes['title'])
@@ -72,16 +71,17 @@ class ManageProjectsTest extends TestCase
 
     public function testAUserCanUpdateAProject()
     {
-        $this->signIn();
+        $project = ProjectFactory::create();
 
-        $project = factory(Project::class)->create(['user_id' => auth()->id()]);
-
-        $attributes = [
-            'notes' => 'Changed',
-        ];
-
-        $this->patch($project->path(), $attributes)
+        $this->actingAs($project->owner)
+            ->patch($project->path(), $attributes = [
+                'title' => 'changed',
+                'description' => 'changed',
+                'notes' => 'changed',
+            ])
             ->assertRedirect($project->path());
+
+        $this->get($project->path() . '/edit')->assertOk();
 
         $this->assertDatabaseHas('projects', $attributes);
     }
