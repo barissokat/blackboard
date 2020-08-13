@@ -49,6 +49,17 @@ class Project extends Model
     }
 
     /**
+     * @param $type
+     */
+    public function recordActivity($type)
+    {
+        Activity::create([
+            'project_id' => $this->id,
+            'description' => $type,
+        ]);
+    }
+
+    /**
      * Get a string path for the project.
      *
      * @return string
