@@ -40,6 +40,16 @@ class Task extends Model
     }
 
     /**
+     * The activity feed for the project.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function activity()
+    {
+        return $this->morphMany(Activity::class, 'subject')->latest();
+    }
+
+    /**
      * Get the path to the task.
      *
      * @return string
@@ -55,7 +65,7 @@ class Task extends Model
     public function complete()
     {
         $this->update(['completed' => true]);
-        $this->project->recordActivity('completed_task');
+        $this->recordActivity('completed_task');
     }
 
     /**
@@ -64,6 +74,19 @@ class Task extends Model
     public function incomplete()
     {
         $this->update(['completed' => false]);
-        $this->project->recordActivity('incompleted_task');
+        $this->recordActivity('incompleted_task');
+    }
+
+    /**
+     * Record activity for a task.
+     *
+     * @param string $description
+     */
+    public function recordActivity($description)
+    {
+        $this->activity()->create([
+            'project_id' => $this->project_id,
+            'description' => $description
+        ]);
     }
 }

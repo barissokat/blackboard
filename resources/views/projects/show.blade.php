@@ -26,7 +26,7 @@
                     @method('PATCH')
                     <div class="card mb-3 flex">
                         <input type="text" name="body" id="" class="w-full {{ $task->completed ? 'text-grey' : '' }}"
-                            value="{{ $task->body }}">
+                            value="{{ $task->body }}" {{ $task->completed ? 'readonly' : ''}}>
                         <input type="checkbox" name="completed" id="" value="1" onchange="this.form.submit()"
                             {{ $task->completed ? 'checked' : '' }}>
                     </div>
