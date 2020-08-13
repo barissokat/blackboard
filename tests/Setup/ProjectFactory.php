@@ -8,11 +8,24 @@ use App\User;
 
 class ProjectFactory
 {
+    /**
+     * The number of tasks for the project.
+     *
+     * @var int
+     */
     protected $tasksCount = 0;
+
+    /**
+     * The owner of the project.
+     *
+     * @var User
+     */
     protected $user;
 
     /**
-     * @param $count
+     * Set the number of tasks to create for the project.
+     *
+     * @param  int $count
      * @return $this
      */
     public function withTasks($count)
@@ -23,7 +36,9 @@ class ProjectFactory
     }
 
     /**
-     * @param $user
+     * Set the owner of the new project.
+     *
+     * @param  User $user
      * @return $this
      */
     public function ownedBy($user)
@@ -34,7 +49,9 @@ class ProjectFactory
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|mixed
+     * Arrange the world.
+     *
+     * @return Project
      */
     public function create()
     {

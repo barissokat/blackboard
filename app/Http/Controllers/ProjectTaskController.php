@@ -19,10 +19,10 @@ class ProjectTaskController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Add a task to the given project.
      *
      * @param Project $project
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(Project $project)
@@ -37,12 +37,11 @@ class ProjectTaskController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the project.
      *
-     * @param Project $project
-     * @param \App\Task $task
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param  Project $project
+     * @param  Task    $task
+     * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Project $project, Task $task, Request $request)
@@ -51,8 +50,7 @@ class ProjectTaskController extends Controller
 
         $task->update(request()->validate(['body' => 'required']));
 
-        $method = request('completed') ? 'complete' : 'incomplete';
-        $task->$method();
+        request('completed') ? $task->complete() : $task->incomplete();
 
         return redirect($project->path());
     }

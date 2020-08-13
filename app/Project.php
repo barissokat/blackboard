@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     /**
-     * Don't auto-apply mass assignment protection.
+     * Attributes to guard against mass assignment.
      *
      * @var array
      */
     protected $guarded = [];
 
     /**
-     * A project has an owner.
+     * The owner of the project.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -24,7 +24,7 @@ class Project extends Model
     }
 
     /**
-     * A project has a task.
+     * The tasks associated with the project.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -33,13 +33,19 @@ class Project extends Model
         return $this->hasMany(Task::class);
     }
 
+    /**
+     * Add a task to the project.
+     *
+     * @param  string $body
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public function addTask($body)
     {
         return $this->tasks()->create(compact('body'));
     }
 
     /**
-     * A project has an activity.
+     * The activity feed for the project.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -49,7 +55,9 @@ class Project extends Model
     }
 
     /**
-     * @param $description
+     * Record activity for a project.
+     *
+     * @param string $description
      */
     public function recordActivity($description)
     {

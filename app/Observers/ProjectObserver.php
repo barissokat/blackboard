@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Activity;
 use App\Project;
 
 class ProjectObserver
@@ -27,38 +26,5 @@ class ProjectObserver
     public function updated(Project $project)
     {
         $project->recordActivity('updated');
-    }
-
-    /**
-     * Handle the project "deleted" event.
-     *
-     * @param  \App\Project  $project
-     * @return void
-     */
-    public function deleted(Project $project)
-    {
-        //
-    }
-
-    /**
-     * Handle the project "restored" event.
-     *
-     * @param  \App\Project  $project
-     * @return void
-     */
-    public function restored(Project $project)
-    {
-        //
-    }
-
-    /**
-     * Handle the project "force deleted" event.
-     *
-     * @param  \App\Project  $project
-     * @return void
-     */
-    public function forceDeleted(Project $project)
-    {
-        //
     }
 }

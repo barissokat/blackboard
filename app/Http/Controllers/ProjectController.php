@@ -19,9 +19,9 @@ class ProjectController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * View all projects.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -31,7 +31,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Create a new project.
      *
      * @return \Illuminate\Http\Response
      */
@@ -41,9 +41,9 @@ class ProjectController extends Controller
     }
 
     /**
-     * Store a new project.
+     * Persist a new project.
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -53,9 +53,11 @@ class ProjectController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show a single project.
      *
-     * @param \App\Project $project
+     * @param Project $project
+     *
+     * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Project $project)
@@ -66,10 +68,10 @@ class ProjectController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Edit the project.
      *
-     * @param  \App\Project  $project
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param  Project $project
+     * @return \Illuminate\Http\Response
      */
     public function edit(Project $project)
     {
@@ -77,10 +79,11 @@ class ProjectController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the project.
      *
-     * @param UpdateProjectRequest $form
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param  Project $project
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(UpdateProjectRequest $form)
     {
@@ -88,6 +91,8 @@ class ProjectController extends Controller
     }
 
     /**
+     * Validate the request attributes.
+     *
      * @return array
      */
     public function validateRequest(): array
