@@ -24,6 +24,8 @@ Route::post('projects', ['as' => 'projects.store', 'uses' => 'ProjectController@
 Route::get('projects/{project}', ['as' => 'projects.show', 'uses' => 'ProjectController@show']);
 Route::get('projects/{project}/edit', ['as' => 'projects.edit', 'uses' => 'ProjectController@edit']);
 Route::patch('projects/{project}', ['as' => 'projects.update', 'uses' => 'ProjectController@update']);
+Route::delete('projects/{project}', ['as' => 'projects.destroy', 'uses' => 'ProjectController@destroy']);
+
 
 Route::post('projects/{project}/tasks', ['as' => 'tasks.store', 'uses' => 'ProjectTaskController@store']);
 Route::patch('projects/{project}/tasks/{task}', ['as' => 'tasks.update', 'uses' => 'ProjectTaskController@update']);
