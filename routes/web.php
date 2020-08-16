@@ -24,6 +24,8 @@ Route::resource('projects', 'ProjectController');
 Route::post('projects/{project}/tasks', ['as' => 'tasks.store', 'uses' => 'ProjectTaskController@store']);
 Route::patch('projects/{project}/tasks/{task}', ['as' => 'tasks.update', 'uses' => 'ProjectTaskController@update']);
 
+Route::post('projects/{project}/invitations', ['as' => 'invitations.store', 'uses' => 'ProjectInvitationController@store']);
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
