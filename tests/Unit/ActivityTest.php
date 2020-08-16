@@ -12,7 +12,7 @@ class ActivityTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testAnActivityHasAnUser()
+    public function testAnActivityHasAUser()
     {
         $user = $this->signIn();
 

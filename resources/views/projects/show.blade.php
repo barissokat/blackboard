@@ -8,15 +8,11 @@
             {{ $project->title }}
             <div class="flex items-center">
                 @foreach ($project->members as $member)
-                    <img
-                        src="{{ gravatar_url($member->email) }}"
-                        alt="{{ $member->name }}'s avatar"
-                        class="rounded-full w-8 mr-2">
+                <img src="{{ gravatar_url($member->email) }}" alt="{{ $member->name }}'s avatar"
+                    class="rounded-full w-8 mr-2">
                 @endforeach
 
-                <img
-                    src="{{ gravatar_url($project->owner->email) }}"
-                    alt="{{ $project->owner->name }}'s avatar"
+                <img src="{{ gravatar_url($project->owner->email) }}" alt="{{ $project->owner->name }}'s avatar"
                     class="rounded-full w-8 mr-2">
 
                 <a href="{{ $project->path().'/edit' }}" class="button ml-4">Edit Project</a>
@@ -73,6 +69,9 @@
         <div class="lg:w-1/4 px-3 lg:py-8">
             @include ('projects._card')
             @include ('projects.activity._card')
+            @can ('manage', $project)
+            @include ('projects._invite')
+            @endcan
         </div>
     </div>
 </main>

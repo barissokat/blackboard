@@ -19,7 +19,7 @@ class UserTest extends TestCase
         $this->assertInstanceOf(Collection::class, $user->projects);
     }
 
-    public function testAnUserHasAccessibleProjects()
+    public function testAUserHasAccessibleProjects()
     {
         $john = $this->signIn();
 

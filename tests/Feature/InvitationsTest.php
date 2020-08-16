@@ -12,14 +12,26 @@ class InvitationsTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testNonOwnersMayNotInviteAnUser()
+    public function testNonOwnersMayNotInviteAUser()
     {
-        $this->actingAs(factory(User::class)->create())
-            ->post(ProjectFactory::create()->path() . '/invitations')
-            ->assertStatus(Response::HTTP_FORBIDDEN);
+        $project = ProjectFactory::create();
+
+        $user = factory(User::class)->create();
+
+        $assertInvitationForbidden = function () use ($user, $project) {
+            $this->actingAs($user)
+                ->post($project->path() . '/invitations')
+                ->assertStatus(Response::HTTP_FORBIDDEN);
+        };
+
+        $assertInvitationForbidden();
+
+        $project->invite($user);
+
+        $assertInvitationForbidden();
     }
 
-    public function testAProjectOwnerCanInviteAnUser()
+    public function testAProjectOwnerCanInviteAUser()
     {
         $project = ProjectFactory::create();
 
@@ -34,7 +46,7 @@ class InvitationsTest extends TestCase
         $this->assertTrue($project->members->contains($userToInvite));
     }
 
-    public function testTheEmailAddressMustBeAssociatedWithAValidBirdboardAccount()
+    public function testTheEmailAddressMustBeAssociatedWithAValidBlackboardAccount()
     {
         $project = ProjectFactory::create();
 
@@ -42,9 +54,7 @@ class InvitationsTest extends TestCase
             ->post($project->path() . '/invitations', [
                 'email' => 'notauser@example.com',
             ])
-            ->assertSessionHasErrors([
-                'email' => 'The user you are inviting must have a Blackboard account.',
-            ]);
+            ->assertSessionHasErrors(['email' => 'The user you are inviting must have a Blackboard account.'], null, 'invitations');
     }
 
     public function testInvitedUsersMayUpdateProjectDetails()
