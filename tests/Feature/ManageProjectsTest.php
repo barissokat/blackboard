@@ -46,50 +46,41 @@ class ManageProjectsTest extends TestCase
 
     public function testAUserCanCreateAProject()
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
 
-        $this->get(route('projects.create'))->assertOk();
+        $this->get(route('projects.create'))->assertStatus(200);
 
-        $attributes = [
-            'title' => $this->faker->word,
-            'description' => $this->faker->sentence,
-            'notes' => $this->faker->sentence,
-        ];
-
-        $response = $this->post(route('projects.store'), $attributes);
-
-        $project = Project::where($attributes)->first();
-
-        $response->assertRedirect($project->path());
-
-        $this->get($project->path())
+        $this->followingRedirects()
+            ->post(route('projects.store'), $attributes = factory(Project::class)->raw())
             ->assertSee($attributes['title'])
             ->assertSee($attributes['description'])
             ->assertSee($attributes['notes']);
     }
 
-    function testAUserCanSeeAllProjectsTheyHaveBeenInvitedToOnTheirDashboard()
+    public function testAUserCanSeeAllProjectsTheyHaveBeenInvitedToOnTheirDashboard()
     {
         $project = tap(ProjectFactory::create())->invite($this->signIn());
 
-        $this->get('/projects')->assertSee($project->title);
+        $this->get(route('projects.index'))->assertSee($project->title);
     }
 
-    function testUnauthorizedUsersCannotDeleteProjects()
+    public function testUnauthorizedUsersCannotDeleteProjects()
     {
         $project = ProjectFactory::create();
 
         $this->delete($project->path())
-            ->assertRedirect('login');
+            ->assertRedirect('/login');
 
-        $this->signIn();
+        $user = $this->signIn();
 
-        $this->delete($project->path())
-             ->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->delete($project->path())->assertStatus(Response::HTTP_FORBIDDEN);
+
+        $project->invite($user);
+
+        $this->actingAs($user)->delete($project->path())->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
-    function testAUserCanDeleteAProject()
+    public function testAUserCanDeleteAProject()
     {
         $project = ProjectFactory::create();
 
@@ -131,13 +122,11 @@ class ManageProjectsTest extends TestCase
 
     public function testAUserCanViewTheirProject()
     {
-        $this->signIn();
+        $project = ProjectFactory::create();
 
-        $project = factory(Project::class)->create(['user_id' => auth()->id()]);
-
-        $this->get($project->path())
-            ->assertSee($project->title)
-            ->assertSee(\Illuminate\Support\Str::limit($project->description, 100));
+        $this->actingAs($project->owner)
+            ->get($project->path())
+            ->assertSee($project->title);
     }
 
     public function testAnAuthenticatedUserCannotViewTheProjectsOfOthers()
