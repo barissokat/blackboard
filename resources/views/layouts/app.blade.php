@@ -21,9 +21,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
-<body class="bg-grey-lighter">
+<body class="theme-light bg-page">
     <div id="app">
-        <nav class="bg-white">
+        <nav class="bg-header">
             <div class="container mx-auto">
                 <div class="flex justify-between items-center py-2">
                     <a class="navbar-brand" href="{{ url('/') }}">
@@ -49,9 +49,9 @@
                             @endif
                             @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                <a id="navbarDropdown" class="flex items-center text-default no-underline text-sm" href="#" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <img width="50" class="rounded-full"
+                                    <img width="35" class="rounded-full mr-3"
                                         src="{{ gravatar_url(auth()->user()->email) }}">
                                 </a>
 
