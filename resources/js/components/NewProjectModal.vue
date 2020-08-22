@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     addTask() {
-      this.form.tasks.push({ value: "" });
+      this.form.tasks.push({ body: '' });
     },
     async submit() {
       try {

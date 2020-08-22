@@ -48,6 +48,17 @@ class Project extends Model
     }
 
     /**
+     * Add a task to the project.
+     *
+     * @param array $tasks
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function addTasks($tasks)
+    {
+        return $this->tasks()->createMany($tasks);
+    }
+
+    /**
      * Get all members that are assigned to the team.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
