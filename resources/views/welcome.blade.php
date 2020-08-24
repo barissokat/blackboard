@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>Blackboard</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -53,7 +53,7 @@
         }
 
         .links>a {
-            color: #636b6f;
+            color: #47cdff;
             padding: 0 25px;
             font-size: 13px;
             font-weight: 600;
@@ -84,33 +84,16 @@
         </div>
         @endif
 
-        <div class="w-full max-w-xs">
-            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" /for/="username"> Username </label> <input
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="username" type="text" placeholder="Username">
-                </div>
-                <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" /for/="password"> Password </label> <input
-                        class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                        id="password" type="password" placeholder="******************">
-                        <p class="text-red-500 text-xs italic">Please choose a password.</p>
-                </div>
-                <div class="flex items-center justify-between">
-                    <button
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="button">
-                        Sign In
-                    </button>
-                    <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
-                        Forgot Password?
-                    </a>
-                </div>
-            </form>
-            <p class="text-center text-gray-500 text-xs">
-                ©2019 iTech Empires. All rights reserved.
-            </p>
+        <div class="content">
+            <div class="title m-b-md">
+                Blackboard
+            </div>
+
+            <div class="links">
+                <a href="https://laravel.com/docs">Docs</a>
+                <a href="https://laracasts.com">Laracasts</a>
+                <a href="https://github.com/barissokat">GitHub</a>
+            </div>
         </div>
     </div>
 </body>
