@@ -3,4 +3,4 @@
 # Build A Laravel App With TDD
 
 ### Blackboard:
-This project is for educational porpuses only. Pull request are welcome! Thank you for your cooperation.
+This is an open-source forum that was built and maintained from Laracasts.com. This project is for educational purposes only.
