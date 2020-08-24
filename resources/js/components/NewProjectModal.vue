@@ -12,11 +12,15 @@
               type="text"
               id="title"
               class="border p-2 text-xs block w-full rounded"
-              :class="errors.title ? 'border-error' : 'border-muted-light'"
+              :class="form.errors.title ? 'border-error' : 'border-muted-light'"
               v-model="form.title"
             />
 
-            <span class="text-xs italic text-error" v-if="errors.title" v-text="errors.title[0]"></span>
+            <span
+              class="text-xs italic text-error"
+              v-if="form.errors.title"
+              v-text="form.errors.title[0]"
+            ></span>
           </div>
 
           <div class="mb-4">
@@ -26,13 +30,13 @@
               id="description"
               class="border border-muted-light p-2 text-xs block w-full rounded"
               rows="7"
-              v-model="form.description"
+              v-model="form.errors.description"
             ></textarea>
 
             <span
               class="text-xs italic text-error"
-              v-if="errors.description"
-              v-text="errors.description[0]"
+              v-if="form.errors.description"
+              v-text="form.errors.description[0]"
             ></span>
           </div>
         </div>
@@ -45,6 +49,7 @@
               class="border border-muted-light mb-2 p-2 text-xs block w-full rounded"
               placeholder="Task 1"
               v-for="task in form.tasks"
+              :key="task.id"
               v-model="task.body"
             />
           </div>
@@ -84,27 +89,29 @@
 </template>
 
 <script>
+import BlackboardForm from "./BlackboardForm";
+
 export default {
   data() {
     return {
-      form: {
+      form: new BlackboardForm({
         title: "",
         description: "",
         tasks: [{ body: "" }],
-      },
-      errors: {},
+      }),
     };
   },
   methods: {
     addTask() {
-      this.form.tasks.push({ body: '' });
+      this.form.tasks.push({ body: "" });
     },
     async submit() {
-      try {
-        location = (await axios.post("projects", this.form)).data.message;
-      } catch (error) {
-        this.errors = error.response.data.errors;
+      if (!this.form.tasks[0].body) {
+        delete this.form.originalData.tasks;
       }
+      this.form
+        .submit("/projects")
+        .then((response) => (location = response.data.message));
     },
   },
 };
